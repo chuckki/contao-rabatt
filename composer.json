@@ -17,7 +17,6 @@
             "Prori\\Rabattbundle" : ""
         }
     },
-    "target-dir" : "Prori/RabattBundle",
     "replace": {
         "contao-legacy/haste": "self.version"
     }
