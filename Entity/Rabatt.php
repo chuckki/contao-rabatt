@@ -12,7 +12,7 @@ namespace Chuckki\RabattBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
- * @ORM\Table(name="tl_hvz_rabatt",options={"engine":"MyISAM"})
+ * @ORM\Table(name="tl_hvz_rabatts",options={"engine":"MyISAM"})
  */
 class Rabatt
 {
@@ -32,15 +32,15 @@ class Rabatt
 	 */
 	protected $rabattProzent;
 	/**
-	 * @ORM\Column(type="text",length=11)
+	 * @ORM\Column(type="text",length=11, nullable=true)
 	 */
 	protected $start;
 	/**
-	 * @ORM\Column(type="text",length=11)
+	 * @ORM\Column(type="text",length=11, nullable=true)
 	 */
 	protected $stop;
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
 	protected $comments;
 	/**

@@ -13,11 +13,6 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 		'dataContainer' => 'Table',
 		'switchToEdit' => true,
 		'enableVersioning' => true,
-		'sql' => [
-			'keys' => [
-				'id' => 'primary',
-			]
-		]
 	],
 	'list' => [
 		'sorting' => [
@@ -90,7 +85,6 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'flag' => 1,
 			'inputType' => 'text',
 			'eval' => ['mandatory' => true, 'maxlength' => 255],
-			'sql' => "varchar(255) NOT NULL default ''"
 		],
 		'rabattProzent' => [
 			'label' => &$GLOBALS['TL_LANG']['tl_hvz_rabatt']['rabattProzent'],
@@ -100,7 +94,6 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'flag' => 1,
 			'inputType' => 'text',
 			'eval' => ['mandatory' => true, 'maxlength' => 255],
-			'sql' => "varchar(255) NOT NULL default ''"
 		],
 		'start' => array
 		(
@@ -108,7 +101,6 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'label'                   => &$GLOBALS['TL_LANG']['tl_content']['start'],
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
-			'sql'                     => "varchar(10) NOT NULL default ''"
 		),
 		'stop' => array
 		(
@@ -116,17 +108,14 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'label'                   => &$GLOBALS['TL_LANG']['tl_content']['stop'],
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
-			'sql'                     => "varchar(10) NOT NULL default ''"
 		),
 		'comments' => [
 			'label' => &$GLOBALS['TL_LANG']['tl_hvz_rabatt']['comments'],
 			'exclude' => true,
 			'search' => true,
 			'inputType'               => 'textarea',
-			'sql'                     => "longtext NULL"
 		],
 		'tstamp' => [
-			'sql' => "int(10) unsigned NOT NULL default '0'"
 		],
 	]
 ];
