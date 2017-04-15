@@ -3,9 +3,7 @@
 ```YAML
 # app/config/routing.yml
 RabattBundle:
-    resource: "@ChuckkiRabattBundle/Controller/"
-    type:     annotation
-    prefix:   /rabatt/
+    resource: "@ChuckkiRabattBundle/Resources/config/routing.yml"
 ```
 ```YAML
 # app/config/config.yml
