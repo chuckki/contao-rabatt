@@ -3,7 +3,7 @@
 ```YAML
 # app/config/routing.yml
 RabattBundle:
-    resource: "@ProriRabattBundle/Controller/"
+    resource: "@ChuckkiRabattBundle/Controller/"
     type:     annotation
     prefix:   /rabatt/
 ```
@@ -21,7 +21,7 @@ doctrine:
     {
         $bundles = [
         //...
-            new Prori\RabattBundle\ProriRabattBundle(),
+            new Chuckki\RabattBundle\ChuckkiRabattBundle(),
         ];
     }
 ```

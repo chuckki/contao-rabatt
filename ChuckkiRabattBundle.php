@@ -6,12 +6,12 @@
  * Time: 12:45
  */
 
-namespace Prori\RabattBundle;
+namespace Chuckki\RabattBundle;
 
-use Prori\RabattBundle\DependencyInjection\RabattBundleExtension;
+use Chuckki\RabattBundle\DependencyInjection\RabattBundleExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ProriRabattBundle extends Bundle
+class ChuckkiRabattBundle extends Bundle
 {
 	public function getContainerExtension()
 	{

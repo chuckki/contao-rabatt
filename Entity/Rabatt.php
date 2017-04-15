@@ -7,7 +7,7 @@
  * @license LGPL-3.0+
  */
 
-namespace Prori\RabattBundle\Entity;
+namespace Chuckki\RabattBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 /**

@@ -8,13 +8,11 @@
  * @license LGPL-3.0+
  */
 
-namespace Prori\RabattBundle\Module;
+namespace Chuckki\RabattBundle\Module;
 
 use Contao\Module;
 
 /**
- * Class ModuleCarList
- * @package Xuad\CarBundle\Module
  */
 class ModuleRabattList extends Module
 {

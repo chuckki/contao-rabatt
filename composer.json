@@ -1,5 +1,5 @@
 {
-    "name" : "prori/rabattbundle",
+    "name" : "chuckki/rabattbundle",
     "description" : "Rabatt extension for Contao",
     "type": "contao-module",
     "authors" : [{

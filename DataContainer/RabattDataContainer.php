@@ -8,13 +8,12 @@
  * @license LGPL-3.0+
  */
 
-namespace Prori\RabattBundle\DataContainer;
+namespace Chuckki\RabattBundle\DataContainer;
 
 use Doctrine\ORM\EntityManager;
 
 /**
  * Class CarDataContainer
- * @package Xuad\CarBundle\DataContainer
  */
 class RabattDataContainer
 {

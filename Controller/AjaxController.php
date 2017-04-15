@@ -1,6 +1,6 @@
 <?php
 
-namespace Prori\RabattBundle\Controller;
+namespace Chuckki\RabattBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,7 +13,7 @@ class AjaxController extends Controller
      */
     public function indexAction($name)
     {
-    	$rabatte = $this->getDoctrine()->getRepository('ProriRabattBundle:Rabatt')->findAll();
+    	$rabatte = $this->getDoctrine()->getRepository('ChuckkiRabattBundle:Rabatt')->findAll();
 
     	$brand = "nix da";
 		foreach ($rabatte as $item) {

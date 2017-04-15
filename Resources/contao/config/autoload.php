@@ -7,5 +7,5 @@
  * @license LGPL-3.0+
  */
 TemplateLoader::addFiles([
-	'mod_rabatt_list' => 'src/Prori/RabattBundle/Resources/contao/templates'
+	'mod_rabatt_list' => 'src/Chuckki/RabattBundle/Resources/contao/templates'
 ]);

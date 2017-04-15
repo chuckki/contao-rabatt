@@ -7,7 +7,7 @@
  * @license LGPL-3.0+
  */
 
-namespace Prori\RabattBundle\Service;
+namespace Chuckki\RabattBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 /**
@@ -33,21 +33,21 @@ class RabattService
 	 *
 	 * @param $alias
 	 *
-	 * @return array|\Prori\RabattBundle\Entity\Rabatt[]
+	 * @return array|\Chuckki\RabattBundle\Entity\Rabatt[]
 	 */
 	public function findByAlias($alias)
 	{
-		$carList = $this->entityManager->getRepository('ProriRabattBundle:Rabatt')->findBy(['alias' => $alias]);
+		$carList = $this->entityManager->getRepository('ChuckkiRabattBundle:Rabatt')->findBy(['alias' => $alias]);
 		return $carList;
 	}
 	/**
 	 * Find all cars
 	 *
-	 * @return array|\Prori\RabattBundle\Entity\Rabatt[]
+	 * @return array|\Chuckki\RabattBundle\Entity\Rabatt[]
 	 */
 	public function findAll()
 	{
-		$carList = $this->entityManager->getRepository('ProriRabattBundle:Rabatt')->findAll();
+		$carList = $this->entityManager->getRepository('ChuckkiRabattBundle:Rabatt')->findAll();
 		return $carList;
 	}
 }

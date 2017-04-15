@@ -8,7 +8,7 @@
  * @license LGPL-3.0+
  */
 
-namespace Prori\RabattBundle\DependencyInjection;
+namespace Chuckki\RabattBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
