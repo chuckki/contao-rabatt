@@ -84,7 +84,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'sorting' => true,
 			'flag' => 1,
 			'inputType' => 'text',
-			'eval' => ['mandatory' => true, 'maxlength' => 255],
+			'eval' => ['mandatory' => true, 'maxlength' => 255, 'minlength' =>7 ],
 		],
 		'rabattProzent' => [
 			'label' => &$GLOBALS['TL_LANG']['tl_hvz_rabatt']['rabattProzent'],
@@ -93,7 +93,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'sorting' => true,
 			'flag' => 1,
 			'inputType' => 'text',
-			'eval' => ['mandatory' => true, 'maxlength' => 255],
+			'eval' => ['mandatory' => true, 'maxlength' => 255, 'rgxp' => 'digit'],
 		],
 		'start' => array
 		(

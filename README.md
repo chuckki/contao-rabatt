@@ -1,5 +1,6 @@
 ## Installation
 
+Add Routing _before_ contao routing! Contao has a catch-all, so our route would be gone away.
 ```YAML
 # app/config/routing.yml
 RabattBundle:
