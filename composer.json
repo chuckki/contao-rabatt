@@ -1,0 +1,24 @@
+{
+    "name" : "prori/rabattbundle",
+    "description" : "Rabatt extension for Contao",
+    "type": "contao-module",
+    "authors" : [{
+        "name" : "chuckki",
+        "email" : "https://github.com/chuckki"
+    }],
+    "license": "LGPL-3.0+",
+    "require": {
+        "php": "~5.4 || ~7.0",
+        "contao/core-bundle":"~3.5 || ~4.1",
+        "contao-community-alliance/composer-plugin":"~2.4 || ~3.0"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "Prori\\Rabattbundle" : ""
+        }
+    },
+    "target-dir" : "Prori/RabattBundle",
+    "replace": {
+        "contao-legacy/haste": "self.version"
+    }
+}
