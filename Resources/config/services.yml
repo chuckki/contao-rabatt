@@ -1,0 +1,9 @@
+services:
+  kernel_bundle:
+    class: Prori\RabattBundle\ProriRabattBundle
+
+
+  prori_rabatt.service.rabattservice:
+    class: Prori\RabattBundle\Service\RabattService
+    arguments:
+     - '@doctrine.orm.entity_manager'
