@@ -27,27 +27,6 @@ class RabattService
 	public function __construct(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
-	}
-	/**
-	 * Find car by alias
-	 *
-	 * @param $alias
-	 *
-	 * @return array|\Chuckki\RabattBundle\Entity\Rabatt[]
-	 */
-	public function findByAlias($alias)
-	{
-		$carList = $this->entityManager->getRepository('ChuckkiRabattBundle:Rabatt')->findBy(['alias' => $alias]);
-		return $carList;
-	}
-	/**
-	 * Find all cars
-	 *
-	 * @return array|\Chuckki\RabattBundle\Entity\Rabatt[]
-	 */
-	public function findAll()
-	{
-		$carList = $this->entityManager->getRepository('ChuckkiRabattBundle:Rabatt')->findAll();
-		return $carList;
+		die('call the rabatt service');
 	}
 }

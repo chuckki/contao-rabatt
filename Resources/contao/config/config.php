@@ -31,4 +31,4 @@ if ('BE' === TL_MODE) {
 /**
  * Frontend modules
  */
-$GLOBALS['FE_MOD']['Chuckki']['ModuleRabattList'] = 'Chuckki\\RabattBundle\\Module\\ModuleRabattList';
+//$GLOBALS['FE_MOD']['Chuckki']['ModuleRabattList'] = 'Chuckki\\RabattBundle\\Module\\ModuleRabattList';

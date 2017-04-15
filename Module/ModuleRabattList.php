@@ -28,6 +28,7 @@ class ModuleRabattList extends Module
      */
     public function generate()
     {
+		die('Modul wurde aufgerufen');
 
         if(TL_MODE == 'BE')
         {
@@ -45,7 +46,6 @@ class ModuleRabattList extends Module
 
         return parent::generate();
     }
-
     /**
      * Generate module
      */
