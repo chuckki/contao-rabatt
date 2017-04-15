@@ -10,7 +10,8 @@
     "require": {
         "php": "~5.4 || ~7.0",
         "contao/core-bundle":"~3.5 || ~4.1",
-        "contao-community-alliance/composer-plugin":"~2.4 || ~3.0"
+        "contao-community-alliance/composer-plugin":"~2.4 || ~3.0",
+        "doctrine/orm": "~2.4,>=2.4.5"
     },
     "require-dev": {
       "doctrine/data-fixtures": "1.0.*",
