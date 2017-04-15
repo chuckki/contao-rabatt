@@ -1,0 +1,4 @@
+RabattBundle:
+    resource: "@ChuckkiRabattBundle/Controller/"
+    type:     annotation
+    prefix:   /rabatt/

@@ -25,5 +25,7 @@ class RabattBundleExtension extends Extension
         );
 
         $loader->load('services.yml');
+        $loader->load('routing.yml');
+
     }
 }
