@@ -20,5 +20,10 @@
     },
     "replace": {
         "contao-legacy/rabattbundle": "self.version"
+    },
+    "autoload":{
+        "psr-4": {
+            "Chuckki\\RabattBundle\\": ""
+        }
     }
 }
