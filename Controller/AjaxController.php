@@ -13,14 +13,13 @@ class AjaxController extends Controller
      */
     public function indexAction($name)
     {
-    	$rabatte = $this->getDoctrine()->getRepository('ChuckkiRabattBundle:Rabatt')->findAll();
+    	$rabatt = $this->getDoctrine()->getRepository('ChuckkiRabattBundle:Rabatt')
+			->findOneBy(['rabattCode' => $name]);
 
-    	$brand = "nix da";
-		foreach ($rabatte as $item) {
-			$brand = $item->getBrand();
-			$test = $item->getBrand();
-    	}
+    	if($rabatt){
+    		return new Response($rabatt->getRabattProzent());
+		}
 
-    	return new Response($brand);
+    	return new Response('0');
     }
 }
