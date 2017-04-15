@@ -2,22 +2,20 @@
     "name" : "chuckki/rabattbundle",
     "description" : "Rabatt extension for Contao",
     "type": "contao-module",
-    "authors" : [{
+    "authors" : [
+      {
         "name" : "chuckki",
         "email" : "https://github.com/chuckki"
-    }],
+      }
+    ],
     "license": "LGPL-3.0+",
     "require": {
         "php": "~5.4 || ~7.0",
         "contao/core-bundle":"~3.5 || ~4.1",
         "contao-community-alliance/composer-plugin":"~2.4 || ~3.0",
-        "doctrine/orm": "~2.4,>=2.4.5"
-    },
-    "require-dev": {
-      "doctrine/data-fixtures": "1.0.*",
-      "doctrine/dbal": "~2.4",
-      "doctrine/orm": "~2.4,>=2.4.5",
-      "doctrine/doctrine-bundle": "~1.2"
+        "doctrine/orm": "~2.4,>=2.4.5",
+        "doctrine/doctrine-bundle": "^1.6",
+        "symfony/monolog-bundle": "^2.8"
     },
     "replace": {
         "contao-legacy/rabattbundle": "self.version"
