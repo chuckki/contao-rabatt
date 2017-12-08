@@ -1,7 +1,7 @@
 {
-    "name" : "chuckki/rabattbundle",
+    "name" : "chuckki/contao-rabatt",
     "description" : "Rabatt extension for Contao",
-    "type": "contao-module",
+    "type": "contao-bundle",
     "authors" : [
       {
         "name" : "chuckki",
@@ -9,20 +9,40 @@
       }
     ],
     "license": "LGPL-3.0+",
-    "require": {
-        "php": "~5.4 || ~7.0",
-        "contao/core-bundle":"~3.5 || ~4.1",
-        "contao-community-alliance/composer-plugin":"~2.4 || ~3.0",
-        "doctrine/orm":"~2.4,>=2.4.5",
-        "doctrine/doctrine-bundle":"^1.6",
-        "symfony/monolog-bundle":"^2.8"
+    "require":{
+        "php":">=7.0",
+        "contao/core-bundle": "~4.3"
     },
-    "replace": {
-        "contao-legacy/rabattbundle":"self.version"
+    "require-dev": {
+        "contao/manager-plugin": "^2.0"
     },
+    "conflict": {
+        "contao/manager-plugin": "<2.0 || >=3.0"
+    },
+
     "autoload":{
         "psr-4": {
-            "Chuckki\\RabattBundle\\": ""
-        }
+            "Chuckki\\ContaoRabattBundle\\": "src/"
+        },
+        "classmap": [
+            "src/Resources/contao/"
+        ],
+        "exclude-from-classmap": [
+            "src/Resources/contao/config/",
+            "src/Resources/contao/dca/",
+            "src/Resources/contao/languages/",
+            "src/Resources/contao/templates/"
+        ]
+    },
+    "extra":{
+        "contao":{
+            "transifex": {
+                "project": "contao-rabatt-bundle",
+                "prefix": "master-",
+                "languages_cto": "src/Resources/contao/languages",
+                "languages_tx": ".tx"
+            }
+        },
+        "contao-manager-plugin": "Chuckki\\ContaoRabattBundle\\ContaoManager\\Plugin"
     }
 }

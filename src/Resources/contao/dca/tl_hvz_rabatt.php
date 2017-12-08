@@ -13,6 +13,13 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 		'dataContainer' => 'Table',
 		'switchToEdit' => true,
 		'enableVersioning' => true,
+        'sql' => array
+        (
+            'keys' => array
+            (
+                'id' => 'primary'
+            )
+        )
 	],
 	'list' => [
 		'sorting' => [
@@ -83,6 +90,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'search' => true,
 			'sorting' => true,
 			'flag' => 1,
+            'sql'                     => "varchar(64) NOT NULL default ''",
 			'inputType' => 'text',
 			'eval' => ['mandatory' => true, 'maxlength' => 255, 'minlength' =>7 ],
 		],
@@ -92,6 +100,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'search' => true,
 			'sorting' => true,
 			'flag' => 1,
+            'sql'                     => "varchar(64) NOT NULL default ''",
 			'inputType' => 'text',
 			'eval' => ['mandatory' => true, 'maxlength' => 255, 'rgxp' => 'digit'],
 		],
@@ -100,6 +109,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'exclude'                 => true,
 			'label'                   => &$GLOBALS['TL_LANG']['tl_content']['start'],
 			'inputType'               => 'text',
+            'sql'                     => "varchar(10) NOT NULL default ''",
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 		),
 		'stop' => array
@@ -107,15 +117,18 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'exclude'                 => true,
 			'label'                   => &$GLOBALS['TL_LANG']['tl_content']['stop'],
 			'inputType'               => 'text',
+            'sql'                     => "varchar(10) NOT NULL default ''",
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 		),
 		'comments' => [
 			'label' => &$GLOBALS['TL_LANG']['tl_hvz_rabatt']['comments'],
 			'exclude' => true,
 			'search' => true,
+            'sql'                     => "text NULL",
 			'inputType'               => 'textarea',
 		],
 		'tstamp' => [
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		],
 	]
 ];

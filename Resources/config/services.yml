@@ -1,8 +1,0 @@
-services:
-  kernel_bundle:
-    class: Chuckki\RabattBundle\ChuckkiRabattBundle
-
-  chuckki_rabatt.service.rabattservice:
-    class: Chuckki\RabattBundle\Service\RabattService
-    arguments:
-     - '@doctrine.orm.entity_manager'

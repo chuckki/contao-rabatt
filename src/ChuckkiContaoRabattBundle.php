@@ -6,15 +6,12 @@
  * Time: 12:45
  */
 
-namespace Chuckki\RabattBundle;
+namespace Chuckki\ContaoRabattBundle;
 
 use Chuckki\RabattBundle\DependencyInjection\RabattBundleExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ChuckkiRabattBundle extends Bundle
+class ChuckkiContaoRabattBundle extends Bundle
 {
-	public function getContainerExtension()
-	{
-		return new RabattBundleExtension();
-	}
+
 }

@@ -22,13 +22,8 @@ array_insert($GLOBALS['BE_MOD'], 0, array
 	)
 ));
 
-
 // Load icon in Contao 4.2 backend
 if ('BE' === TL_MODE) {
-    $GLOBALS['TL_CSS'][] = 'bundles/chuckkirabatt/backend.css';
+    $GLOBALS['TL_CSS'][] = 'bundles/chuckkicontaorabatt/backend.css';
 }
 
-/**
- * Frontend modules
- */
-//$GLOBALS['FE_MOD']['Chuckki']['ModuleRabattList'] = 'Chuckki\\RabattBundle\\Module\\ModuleRabattList';
