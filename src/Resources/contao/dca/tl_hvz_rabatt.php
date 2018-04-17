@@ -30,9 +30,10 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'panelLayout' => 'debug;filter;sort,search,limit',
 		],
 		'label' => [
-			'fields' => ['rabattCode','rabattProzent'],
-			'format' => 'hier: %s %s',
-			'showColumns' => true,
+			'fields'            => ['rabattCode','rabattProzent','start','stop'],
+			'format'            => 'hier: %s %s %s %s',
+			'showColumns'       => true,
+            'label_callback'    => array('tl_thtp_days', 'listDates'),
 		],
 		'global_operations' => [
 			'all' => [
@@ -85,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'sql' => "int(11) unsigned NOT NULL auto_increment"
 		],
 		'rabattCode' => [
-			'label' => &$GLOBALS['TL_LANG']['tl_hvz_rabatt']['rabattCode'],
+			'label' => array('Code','Rabatt-Code'),
 			'exclude' => true,
 			'search' => true,
 			'sorting' => true,
@@ -95,7 +96,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'eval' => ['mandatory' => true, 'maxlength' => 255, 'minlength' =>7 ],
 		],
 		'rabattProzent' => [
-			'label' => &$GLOBALS['TL_LANG']['tl_hvz_rabatt']['rabattProzent'],
+			'label' => array('Prozent','Ermässigung in Prozent'),
 			'exclude' => true,
 			'search' => true,
 			'sorting' => true,
@@ -107,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 		'start' => array
 		(
 			'exclude'                 => true,
-			'label'                   => &$GLOBALS['TL_LANG']['tl_content']['start'],
+			'label'                   => array('Startdatum','Falls gesetzt, wird dieser Code erst dann gültig'),
 			'inputType'               => 'text',
             'sql'                     => "varchar(10) NOT NULL default ''",
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
@@ -115,13 +116,13 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 		'stop' => array
 		(
 			'exclude'                 => true,
-			'label'                   => &$GLOBALS['TL_LANG']['tl_content']['stop'],
+			'label'                   => array('Stopdatum','Stopdatum für die Gültigkeit des Codes.'),
 			'inputType'               => 'text',
             'sql'                     => "varchar(10) NOT NULL default ''",
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 		),
 		'comments' => [
-			'label' => &$GLOBALS['TL_LANG']['tl_hvz_rabatt']['comments'],
+			'label' => array('Kommentar','optional'),
 			'exclude' => true,
 			'search' => true,
             'sql'                     => "text NULL",
@@ -132,3 +133,18 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 		],
 	]
 ];
+
+class tl_thtp_days extends Backend
+{
+
+    /**
+     * List a particular record
+     * @param array
+     * @return string
+     */
+    public function listDates($arrRow)
+    {
+
+        return array($arrRow['rabattCode'],$arrRow['rabattProzent'],date('d.m.Y',$arrRow['start']),date('d.m.Y',$arrRow['stop']));
+    }
+}

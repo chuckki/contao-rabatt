@@ -13,7 +13,7 @@
 array_insert($GLOBALS['BE_MOD'], 0, array
 (
 	'Hvz' => array(
-	'Rabatte' => [
+	'Gutschein' => [
 		'tables' => ['tl_hvz_rabatt'],
 		'icon' => 'bundles/chuckkirabatt/icon.png',
 		'table' => ['TableWizard', 'importTable'],
