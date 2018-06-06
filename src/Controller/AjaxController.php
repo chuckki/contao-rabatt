@@ -186,13 +186,11 @@ class AjaxController extends Controller
 
             $result = \Database::getInstance()
                 ->prepare($sql)
-                ->execute();
                 ->query();
 //                ->execute();
 
             $result_raw = \Database::getInstance()
                 ->prepare($sql_raw)
-                ->execute();
                 ->query();
 //                ->execute();
 
