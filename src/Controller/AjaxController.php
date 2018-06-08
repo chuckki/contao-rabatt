@@ -64,7 +64,7 @@ class AjaxController extends Controller
      * @Route("/search/{ort}", defaults={"_scope" = "frontend", "_token_check" = false})
      */
     public function searchAction($ort){
-
+        $ort = trim($ort);
         if($ort != "" and $ort != null){
             $isNumber = false;
             $hasNull = false;
