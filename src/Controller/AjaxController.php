@@ -130,7 +130,7 @@ class AjaxController extends Controller
             //////////////////////////////////////////////////////
 
             //$musterString = '/^[a-zA-Z]*/';
-            $musterString = '/^[a-z-A-Z]/';
+            $musterString = '/^[a-z-A-ZöäüßÖÄÜß]/';
             if(preg_match($musterString, $request)){
                 $splitAnfrage = explode(' ',$request);
                 // plz unknown
@@ -182,23 +182,13 @@ class AjaxController extends Controller
             }
 
 
-            //db
-
             $result = \Database::getInstance()
                 ->prepare($sql)
                 ->query();
-//                ->execute();
 
             $result_raw = \Database::getInstance()
                 ->prepare($sql_raw)
                 ->query();
-//                ->execute();
-
-
-
-            //$result = $db->query($sql);
-            //$result_raw = $db->query($sql_raw);
-
 
             $emparray = array();
             $emparray_raw = array();
@@ -257,6 +247,8 @@ class AjaxController extends Controller
             $allErg = array_unique(array_merge($emparray,$emparray_raw), SORT_REGULAR);
 
             return new JsonResponse($allErg);
+        }else{
+            return new JsonResponse(null);
         }
     }
 }
