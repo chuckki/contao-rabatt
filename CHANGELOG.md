@@ -1,8 +1,11 @@
 HVZ Rabatt Module
 ================================
 
-Version 1.1.3 (2018-)
+Version 1.1.3 (2018-10-24)
 ---------------------------
+
+### Fixed
+fix start/stop view
 
 ### Fixed
 Add sensio-framework-extra-bundle
