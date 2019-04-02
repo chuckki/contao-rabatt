@@ -251,4 +251,38 @@ class AjaxController extends Controller
             return new JsonResponse(null);
         }
     }
+
+    /**
+     * @Route("/apiCheck/", defaults={"_scope" = "frontend", "_token_check" = false})
+     */
+    public function listApiOrders(){
+
+        $ts = strtotime("-1 day");
+        return $this->listApiOrdersWithTime($ts);
+    }
+
+    /**
+     * @Route("/apiCheck/{ts}", defaults={"_scope" = "frontend", "_token_check" = false})
+     */
+    public function listApiOrdersWithTime($ts){
+
+        $objRabatt = \Database::getInstance()
+            ->prepare("SELECT
+                  orderNumber
+                FROM 
+                  tl_hvz_orders
+                WHERE
+                  tstamp>? AND orderNumber != '0'
+            ")
+            ->execute($ts);
+
+        $orderNums = array();
+        while($objRabatt->next()){
+            $orderNums[] = $objRabatt->orderNumber;
+        }
+
+        return new JsonResponse($orderNums);
+    }
+
+
 }
