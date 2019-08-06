@@ -121,7 +121,7 @@ class AjaxController extends Controller
                 $requestOrt = implode(' ',$splitAnfrage);
                 $requestOrt = strtolower($requestOrt)."%";
 
-                $sql = "select distinct plzS as post, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_plz.plzS like '".$requestPLZ."' and LOWER(tl_hvz.question) like '".$requestOrt."' group by question order by isFamus DESC ,question ASC   LIMIT 0, 10";
+                $sql = "select distinct tl_hvz.id as hvzId, plzS as post, alias, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_plz.plzS like '".$requestPLZ."' and LOWER(tl_hvz.question) like '".$requestOrt."' group by question order by isFamus DESC ,question ASC   LIMIT 0, 10";
                 $sql_raw = $sql;
             }
 
@@ -157,8 +157,9 @@ class AjaxController extends Controller
                     $requestOrt .= $value." ";
                 }
                 // cut off last whitespace
-                $requestOrt = substr($requestOrt,0,-1);
-                $requestOrt = strtolower($requestOrt)."%";
+                $requestOrt = trim($requestOrt);
+                $requestOrt = mb_strtolower($requestOrt)."%";
+
 
                 // get alternative ortStrings
                 $umlaute  = array("ü","ö","ä");
@@ -172,11 +173,11 @@ class AjaxController extends Controller
                 $request_alt4 = str_replace('ss', 'ß', $requestOrt);
                 $request_alt5 = str_replace('ß', 'ss', $requestOrt);
 
-                $sql = "select distinct plzS as post, question as value, land, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_plz.plzS like '".$requestPLZ."' and ( LOWER(question) like '".$requestOrt."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3."' or LOWER(question) like '".$request_alt4."' or LOWER(question) like '".$request_alt5."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
+                $sql = "select distinct tl_hvz.id as hvzId, plzS as post, question as value, land, alias, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_plz.plzS like '".$requestPLZ."' and ( LOWER(question) like '".$requestOrt."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3."' or LOWER(question) like '".$request_alt4."' or LOWER(question) like '".$request_alt5."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
 
                 # add ausland
                 //$sql_raw = "select distinct question as value, land, isFamus from tl_hvz where ( LOWER(question) like '".$requestOrt."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3."' or LOWER(question) like '".$request_alt4."' or LOWER(question) like '".$request_alt5."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
-                $sql_raw = "select distinct '' as post, question as value, land, isFamus from tl_hvz where ( LOWER(question) like '%".$requestOrt."' or LOWER(question) like '".$requestOrt."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3."' or LOWER(question) like '".$request_alt4."' or LOWER(question) like '".$request_alt5."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
+                $sql_raw = "select distinct '' as post, tl_hvz.id as hvzId, question as value, land, alias, isFamus from tl_hvz where ( LOWER(question) like '%".$requestOrt."' or LOWER(question) like '".$requestOrt."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3."' or LOWER(question) like '".$request_alt4."' or LOWER(question) like '".$request_alt5."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
                 //echo "firstOrt:".$sql."\n\n";
 
             }
@@ -218,6 +219,8 @@ class AjaxController extends Controller
                 }
                 $tmp['ort'] = str_replace('&#40;', '(', $tmp['ort']);
                 $tmp['ort'] = str_replace('&#41;', ')', $tmp['ort']);
+                $tmp['alias'] = $newPlz['alias'];
+                $tmp['id'] = $newPlz['hvzId'];
                 $emparray_raw[] = $tmp;
             }
 
@@ -241,6 +244,8 @@ class AjaxController extends Controller
                 }
                 $tmp['ort'] = str_replace('&#40;', '(', $tmp['ort']);
                 $tmp['ort'] = str_replace('&#41;', ')', $tmp['ort']);
+                $tmp['alias'] = $newPlz['alias'];
+                $tmp['id'] = $newPlz['hvzId'];
                 $emparray[] = $tmp;
             }
 
