@@ -130,7 +130,7 @@ class AjaxController extends Controller
             //////////////////////////////////////////////////////
 
             //$musterString = '/^[a-zA-Z]*/';
-            $musterString = '/^[a-z-A-ZöäüßÖÄÜß]/';
+            $musterString = '/^[a-z-A-ZöäüßÖÄÜß()]/';
             if(preg_match($musterString, $request)){
                 $splitAnfrage = explode(' ',$request);
                 // plz unknown
@@ -158,6 +158,10 @@ class AjaxController extends Controller
                 }
                 // cut off last whitespace
                 $requestOrt = trim($requestOrt);
+
+                $requestOrt = str_replace('(','&#40;',$requestOrt );
+                $requestOrt = str_replace(')','&#41;', $requestOrt);
+
                 $requestOrt = mb_strtolower($requestOrt)."%";
 
 
@@ -181,7 +185,6 @@ class AjaxController extends Controller
                 //echo "firstOrt:".$sql."\n\n";
 
             }
-
 
             $result = \Database::getInstance()
                 ->prepare($sql)
