@@ -142,10 +142,10 @@ class tl_thtp_days extends Backend
      * @param array
      * @return string
      */
-    public function listDates($arrRow)
+    public function listDates($arrRow): array
     {
-        $start = ($arrRow['start']) ? date('d.m.Y', intval($arrRow['start'])) :'';
-        $stop = ($arrRow['stop']) ? date('d.m.Y', intval($arrRow['stop'])) :'';
+        $start = ($arrRow['start']) ? date('d.m.Y', (int)$arrRow['start']) :'';
+        $stop = ($arrRow['stop']) ? date('d.m.Y', (int)$arrRow['stop']) :'';
 
         return array(
             $arrRow['rabattCode'],

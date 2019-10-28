@@ -6,6 +6,9 @@
  *
  * @license LGPL-3.0+
  */
+
+use Chuckki\ContaoRabattBundle\Model\HvzRabattModel;
+
 /**
  * Backend modules
  */
@@ -26,4 +29,7 @@ array_insert($GLOBALS['BE_MOD'], 0, array
 if ('BE' === TL_MODE) {
     $GLOBALS['TL_CSS'][] = 'bundles/chuckkicontaorabatt/backend.css';
 }
+
+
+$GLOBALS['TL_MODELS']['tl_hvz_rabatt'] = HvzRabattModel::class;
 
