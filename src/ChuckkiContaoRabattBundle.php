@@ -8,7 +8,6 @@
 
 namespace Chuckki\ContaoRabattBundle;
 
-use Chuckki\RabattBundle\DependencyInjection\RabattBundleExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ChuckkiContaoRabattBundle extends Bundle

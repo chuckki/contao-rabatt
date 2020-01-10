@@ -83,7 +83,7 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 	],
 	'fields' => [
 		'id' => [
-			'sql' => "int(11) unsigned NOT NULL auto_increment"
+			'sql' => 'int(11) unsigned NOT NULL auto_increment'
 		],
 		'rabattCode' => [
 			'label' => array('Code','Rabatt-Code'),
@@ -122,11 +122,11 @@ $GLOBALS['TL_DCA']['tl_hvz_rabatt'] = [
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 		),
 		'comments' => [
-			'label' => array('Kommentar','optional'),
-			'exclude' => true,
-			'search' => true,
-            'sql'                     => "text NULL",
-			'inputType'               => 'textarea',
+            'label' => array('Kommentar','optional'),
+            'exclude' => true,
+            'search' => true,
+            'sql'                     => 'text NULL',
+            'inputType'               => 'textarea',
 		],
 		'tstamp' => [
             'sql'                     => "int(10) unsigned NOT NULL default '0'"

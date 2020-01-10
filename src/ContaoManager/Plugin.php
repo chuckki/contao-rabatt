@@ -34,7 +34,6 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
         ];
     }
 
-
     /**
      * {@inheritdoc}
      */

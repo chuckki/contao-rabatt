@@ -2,70 +2,48 @@
 
 namespace Chuckki\ContaoRabattBundle\Controller;
 
+use Chuckki\ContaoHvzBundle\HvzOrderModel;
+use Chuckki\ContaoRabattBundle\Model\HvzRabattModel;
 use Contao\CoreBundle\Monolog\ContaoContext;
 use Psr\Log\LogLevel;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AjaxController extends Controller
 {
     /**
      * @Route("/rabatt/{name}", defaults={"_scope" = "frontend", "_token_check" = false})
      */
-    public function indexAction($name)
+    public function indexAction($name): Response
     {
-
     	if(strlen($name) < 7){
             return new Response('0');
-    		$ipAddress = $_SERVER['REMOTE_ADDR'];
-			if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
-				$ipAddress = array_pop(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']));
-			}
-    		$this->get('logger')->critical('Rabbat Request < 7',['ip' => $ipAddress, 'request' => $name]);
-			return new Response('Your request is recorded as a hacking attack. Your IP is saved and the admin is noticed. Stop it! Now!');
 		}
 
-		$objRabatt = \Database::getInstance()
-            ->prepare("SELECT
-                  rabattProzent,
-                  rabattCode
-                FROM 
-                  tl_hvz_rabatt
-                WHERE
-                  rabattCode=? AND 
-                  (start<? OR start='') AND 
-                  (stop>? OR stop='')
-            
-            ")
-            ->limit(1)
-            ->execute($name,time(),time());
+    	$rabattPerzent = (int) HvzRabattModel::findRabattOnCode($name);
 
-    	if($objRabatt->numRows < 1){
-    	    \System::getContainer()
+    	if(! $rabattPerzent){
+            \System::getContainer()
                 ->get('monolog.logger.contao')
                 ->log(LogLevel::ALERT,
-                'Falscher Rabatt-Code:'.$name,
+                    'Falscher Rabatt-Code:'.$name,
                     array('contao' => new ContaoContext('RabattBundle compile ', TL_ERROR))
                 );
-                return new Response('0');
+            return new Response('0');
         }
 
-
-        while($objRabatt->next()){
-            return new Response($objRabatt->rabattProzent);
-        }
-
-    	return new Response('0');
+        return new Response($rabattPerzent);
     }
 
     /**
      * @Route("/search/{ort}", defaults={"_scope" = "frontend", "_token_check" = false})
      */
-    public function searchAction($ort){
+    public function searchAction($ort): JsonResponse
+    {
         $ort = trim($ort);
-        if($ort != "" and $ort != null){
+        if($ort !== '' && $ort !== null){
             $isNumber = false;
             $hasNull = false;
             $withPLZ = false;
@@ -82,11 +60,11 @@ class AjaxController extends Controller
             // CLEAN UP REQUEST
             //////////////////////////////////////////////////////
 
-            if (!preg_match("/^([a-zA-Z0-9öäüßÖÄÜß,.() \n\r-]+)$/is", $request)) {
+            if (!preg_match("/^([a-zA-Z0-9öäüßÖÄÜ,.() \n\r-]+)$/is", $request)) {
                 //$errorArray = array('ort' => "Unerlaubte Zeichen enthalten!");
                 $errorArray = array();
                 $tmpInsert  = array();
-                $tmpInsert['ort'] = "Unerlaubte Zeichen enthalten!";
+                $tmpInsert['ort'] = 'Unerlaubte Zeichen enthalten!';
                 $errorArray[] = $tmpInsert;
 
                 return new JsonResponse($errorArray, 403);
@@ -119,7 +97,7 @@ class AjaxController extends Controller
                 unset($splitAnfrage[0]);
                 // build up rest of string to ortString
                 $requestOrt = implode(' ',$splitAnfrage);
-                $requestOrt = strtolower($requestOrt)."%";
+                $requestOrt = strtolower($requestOrt) . '%';
 
                 $sql = "select distinct tl_hvz.id as hvzId, plzS as post, alias, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_plz.plzS like '".$requestPLZ."' and LOWER(tl_hvz.question) like '".$requestOrt."' group by question order by isFamus DESC ,question ASC   LIMIT 0, 10";
                 $sql_raw = $sql;
@@ -154,20 +132,19 @@ class AjaxController extends Controller
                         }
                         break;
                     }
-                    $requestOrt .= $value." ";
+                    $requestOrt .= $value . ' ';
                 }
                 // cut off last whitespace
                 $requestOrt = trim($requestOrt);
 
-                $requestOrt = str_replace('(','&#40;',$requestOrt );
-                $requestOrt = str_replace(')','&#41;', $requestOrt);
+                $requestOrt = str_replace(array('(', ')'), array('&#40;', '&#41;'), $requestOrt);
 
-                $requestOrt = mb_strtolower($requestOrt)."%";
+                $requestOrt = mb_strtolower($requestOrt) . '%';
 
 
                 // get alternative ortStrings
-                $umlaute  = array("ü","ö","ä");
-                $umlautev = array("ue","oe","ae");
+                $umlaute  = array('ü', 'ö', 'ä');
+                $umlautev = array('ue', 'oe', 'ae');
                 $request_alt0 = str_replace($umlautev, $umlaute, $requestOrt);
                 $request_alt1 = str_replace($umlaute, $umlautev, $requestOrt);
 
@@ -197,31 +174,26 @@ class AjaxController extends Controller
             $emparray = array();
             $emparray_raw = array();
 
-            $justValue = array();
-            //$db->close();
-
             while($newPlz = $result_raw->fetchAssoc()){
                 $tmp = array();
                 // PLZ first
                 if($isNumber){
-                    $newPlz['post'] = ($hasNull) ? "0".$newPlz['post']: $newPlz['post'];
-                    $tmp['ort'] = $newPlz['post']." ".$newPlz['value'];
-                    $justValue[] = $newPlz['post']." ".$newPlz['value'];
+                    $newPlz['post'] = ($hasNull) ? '0' . $newPlz['post']: $newPlz['post'];
+                    $tmp['ort'] = $newPlz['post'] . ' ' . $newPlz['value'];
                 }else{
                     if($withPLZ){
-                        $newPlz['post'] = ($hasNull) ? "0".$newPlz['post']: $newPlz['post'];
-                        $tmp['ort'] = $newPlz['value']." (".$newPlz['post'].")";
-                        $justValue[] = $newPlz['value']." (".$newPlz['post'].")";
+                        $newPlz['post'] = ($hasNull) ? '0' . $newPlz['post']: $newPlz['post'];
+                        $tmp['ort'] = $newPlz['value'] . ' (' . $newPlz['post'] . ')';
                     }else{
                         $tmp['ort'] = $newPlz['value'];
-                        if ($newPlz['land'] != 'Deutschland'){
+                        //if($newPlz['land'] !== 'Deutschland'){
                             //$tmp['ort'] = $tmp['ort'].' ('.$newPlz['land'].')';
-                        }
-                        $justValue[] = $newPlz['value'];
+                        //}
                     }
                 }
-                $tmp['ort'] = str_replace('&#40;', '(', $tmp['ort']);
-                $tmp['ort'] = str_replace('&#41;', ')', $tmp['ort']);
+
+                $tmp['ort'] = str_replace(['&#40;','&#41;'],['(', ')'], $tmp['ort']);
+
                 $tmp['alias'] = $newPlz['alias'];
                 $tmp['id'] = $newPlz['hvzId'];
                 $emparray_raw[] = $tmp;
@@ -232,17 +204,14 @@ class AjaxController extends Controller
                 $tmp = array();
                 // PLZ first
                 if($isNumber){
-                    $newPlz['post'] = ($hasNull) ? "0".$newPlz['post']: $newPlz['post'];
-                    $tmp['ort'] = $newPlz['post']." ".$newPlz['value'];
-                    $justValue[] = $newPlz['post']." ".$newPlz['value'];
+                    $newPlz['post'] = ($hasNull) ? '0' . $newPlz['post']: $newPlz['post'];
+                    $tmp['ort'] = $newPlz['post'] . ' ' . $newPlz['value'];
                 }else{
                     if($withPLZ){
-                        $newPlz['post'] = ($hasNull) ? "0".$newPlz['post']: $newPlz['post'];
-                        $tmp['ort'] = $newPlz['value']." (".$newPlz['post'].")";
-                        $justValue[] = $newPlz['value']." (".$newPlz['post'].")";
+                        $newPlz['post'] = ($hasNull) ? '0' . $newPlz['post']: $newPlz['post'];
+                        $tmp['ort'] = $newPlz['value'] . ' (' . $newPlz['post'] . ')';
                     }else{
                         $tmp['ort'] = $newPlz['value'];
-                        $justValue[] = $newPlz['value'];
                     }
                 }
                 $tmp['ort'] = str_replace('&#40;', '(', $tmp['ort']);
@@ -255,42 +224,29 @@ class AjaxController extends Controller
             $allErg = array_unique(array_merge($emparray,$emparray_raw), SORT_REGULAR);
 
             return new JsonResponse($allErg);
-        }else{
-            return new JsonResponse(null);
         }
+        return new JsonResponse(null);
     }
 
     /**
      * @Route("/apiCheck/", defaults={"_scope" = "frontend", "_token_check" = false})
      */
-    public function listApiOrders(){
-
-        $ts = strtotime("-1 day");
+    public function listApiOrders(): JsonResponse
+    {
+        $ts = strtotime('-1 day');
         return $this->listApiOrdersWithTime($ts);
     }
 
     /**
      * @Route("/apiCheck/{ts}", defaults={"_scope" = "frontend", "_token_check" = false})
      */
-    public function listApiOrdersWithTime($ts){
-
-        $objRabatt = \Database::getInstance()
-            ->prepare("SELECT
-                  orderNumber
-                FROM 
-                  tl_hvz_orders
-                WHERE
-                  tstamp>? AND orderNumber != '0'
-            ")
-            ->execute($ts);
-
-        $orderNums = array();
-        while($objRabatt->next()){
-            $orderNums[] = $objRabatt->orderNumber;
+    public function listApiOrdersWithTime($ts): JsonResponse
+    {
+        $hvzOrders = HvzOrderModel::findBy(['tstamp>?', 'orderNumber != ?'], [$ts, '0']);
+        $orders = [];
+        foreach ($hvzOrders as $order) {
+            $orders[] = $order->id;
         }
-
-        return new JsonResponse($orderNums);
+        return new JsonResponse($orders);
     }
-
-
 }
