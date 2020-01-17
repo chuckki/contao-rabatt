@@ -25,12 +25,15 @@ class AjaxController extends Controller
     	$rabattPerzent = (int) HvzRabattModel::findRabattOnCode($name);
 
     	if(! $rabattPerzent){
+    	    // todo: look how contao log
+    	    /*
             \System::getContainer()
                 ->get('monolog.logger.contao')
                 ->log(LogLevel::ALERT,
                     'Falscher Rabatt-Code:'.$name,
                     array('contao' => new ContaoContext('RabattBundle compile ', TL_ERROR))
                 );
+            */
             return new Response('0');
         }
 
