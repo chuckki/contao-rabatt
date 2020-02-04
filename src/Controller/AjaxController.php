@@ -115,7 +115,7 @@ class AjaxController extends AbstractController
                 $requestOrt = implode(' ', $splitAnfrage);
                 $requestOrt = strtolower($requestOrt).'%';
                 $sql     =
-                    "select distinct tl_hvz.id as hvzId, plzS as post, alias, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk like '"
+                    "select distinct tl_hvz.id as hvzId, plzS as post, alias, tl_hvz.lk as lkz, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk like '"
                     .$country."' and tl_plz.plzS like '".$requestPLZ."' and LOWER(tl_hvz.question) like '".$requestOrt
                     ."' group by question order by isFamus DESC ,question ASC   LIMIT 0, 10";
                 $sql_raw = $sql;
@@ -164,7 +164,7 @@ class AjaxController extends AbstractController
                 $request_alt4 = str_replace('ss', 'ß', $requestOrt);
                 $request_alt5 = str_replace('ß', 'ss', $requestOrt);
                 $sql =
-                    "select distinct tl_hvz.id as hvzId, plzS as post, question as value, land, alias, isFamus, tl_hvz.lk from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk = '"
+                    "select distinct tl_hvz.id as hvzId, plzS as post, question as value, land, alias, isFamus, tl_hvz.lk as lkz from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk = '"
                     .$country."' and  tl_plz.plzS like '".$requestPLZ."' and ( LOWER(question) like '".$requestOrt
                     ."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2
                     ."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3
@@ -172,7 +172,7 @@ class AjaxController extends AbstractController
                     ."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
                 # add ausland
                 $sql_raw =
-                    "select distinct '' as post, tl_hvz.id as hvzId, question as value, land, alias, isFamus, tl_hvz.lk from tl_hvz where tl_hvz.lk = '"
+                    "select distinct '' as post, tl_hvz.id as hvzId, question as value, land, alias, isFamus, tl_hvz.lk as lkz from tl_hvz where tl_hvz.lk = '"
                     .$country."' and  ( LOWER(question) like '%".$requestOrt."' or LOWER(question) like '".$requestOrt
                     ."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2
                     ."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3
@@ -204,6 +204,7 @@ class AjaxController extends AbstractController
                 $tmp['ort'] = str_replace(['&#40;', '&#41;'], ['(', ')'], $tmp['ort']);
                 $tmp['alias']   = $newPlz['alias'];
                 $tmp['id']      = $newPlz['hvzId'];
+                $tmp['lkz']      = $newPlz['lkz'];
                 $emparray_raw[] = $tmp;
             }
             while ($newPlz = $result->fetchAssoc()) {
@@ -224,6 +225,7 @@ class AjaxController extends AbstractController
                 $tmp['ort']   = str_replace('&#41;', ')', $tmp['ort']);
                 $tmp['alias'] = $newPlz['alias'];
                 $tmp['id']    = $newPlz['hvzId'];
+                $tmp['lkz']      = $newPlz['lkz'];
                 $emparray[]   = $tmp;
             }
             $allErg = array_unique(array_merge($emparray, $emparray_raw), SORT_REGULAR);
