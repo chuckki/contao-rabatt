@@ -2,7 +2,9 @@
 
 namespace Chuckki\ContaoRabattBundle\Controller;
 
+use Chuckki\ContaoHvzBundle\HvzModel;
 use Chuckki\ContaoHvzBundle\HvzOrderModel;
+use Chuckki\ContaoHvzBundle\HvzPlzModel;
 use Chuckki\ContaoRabattBundle\Model\HvzRabattModel;
 use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\FrontendUser;
@@ -113,7 +115,7 @@ class AjaxController extends AbstractController
                 $requestOrt = implode(' ', $splitAnfrage);
                 $requestOrt = strtolower($requestOrt).'%';
                 $sql     =
-                    "select distinct tl_hvz.id as hvzId, plzS as post, alias, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where lk like '"
+                    "select distinct tl_hvz.id as hvzId, plzS as post, alias, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk like '"
                     .$country."' and tl_plz.plzS like '".$requestPLZ."' and LOWER(tl_hvz.question) like '".$requestOrt
                     ."' group by question order by isFamus DESC ,question ASC   LIMIT 0, 10";
                 $sql_raw = $sql;
@@ -162,7 +164,7 @@ class AjaxController extends AbstractController
                 $request_alt4 = str_replace('ss', 'ß', $requestOrt);
                 $request_alt5 = str_replace('ß', 'ss', $requestOrt);
                 $sql =
-                    "select distinct tl_hvz.id as hvzId, plzS as post, question as value, land, alias, isFamus, lk from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk = '"
+                    "select distinct tl_hvz.id as hvzId, plzS as post, question as value, land, alias, isFamus, tl_hvz.lk from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk = '"
                     .$country."' and  tl_plz.plzS like '".$requestPLZ."' and ( LOWER(question) like '".$requestOrt
                     ."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2
                     ."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3
@@ -170,7 +172,7 @@ class AjaxController extends AbstractController
                     ."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
                 # add ausland
                 $sql_raw =
-                    "select distinct '' as post, tl_hvz.id as hvzId, question as value, land, alias, isFamus, lk from tl_hvz where tl_hvz.lk = '"
+                    "select distinct '' as post, tl_hvz.id as hvzId, question as value, land, alias, isFamus, tl_hvz.lk from tl_hvz where tl_hvz.lk = '"
                     .$country."' and  ( LOWER(question) like '%".$requestOrt."' or LOWER(question) like '".$requestOrt
                     ."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2
                     ."' or LOWER(question) like '".$request_alt0."' or LOWER(question) like '".$request_alt3
@@ -321,4 +323,42 @@ class AjaxController extends AbstractController
 
         return new JsonResponse($orders);
     }
+
+
+    /**
+     * @Route("/public/tab", defaults={"_scope" = "frontend", "_token_check" = false})
+     */
+    public function updateHvz(): Response
+    {
+        if (1) {
+            $hvzObjs = HvzModel::findBy(['old_id > ?'], ['0']);
+            /** @var Connection $conn */
+            $conn = $this->getDoctrine()->getConnection();
+            foreach ($hvzObjs as $hvz) {
+
+                $sql = 'SELECT * FROM tl_plz_at where ortid = '.$hvz->old_id  . ' group by plz';
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $all = $stmt->fetchAll();
+                if ($hvz->old_id >= 2742) {
+                    continue;
+                }
+                foreach ($all as $plzObj) {
+                    $plz        = new HvzPlzModel();
+                    $plz->plz   = $plzObj['plz'];
+                    $plz->ortid = $hvz->id;
+                    $plz->plzS  = $plzObj['plzS'];
+                    $plz->lk    = 'at';
+                    $plz->save();
+                }
+            }
+        }
+
+        $html ="done";
+
+        return new Response($html);
+    }
+
+
+
 }
