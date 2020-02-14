@@ -30,24 +30,7 @@ class AjaxController extends AbstractController
      */
     public function indexAction($name): Response
     {
-        if (strlen($name) < 7) {
-            return new Response('0');
-        }
-        $rabattPerzent = (int)HvzRabattModel::findRabattOnCode($name);
-        if (!$rabattPerzent) {
-            // todo: look how contao log
-            /*
-            \System::getContainer()
-                ->get('monolog.logger.contao')
-                ->log(LogLevel::ALERT,
-                    'Falscher Rabatt-Code:'.$name,
-                    array('contao' => new ContaoContext('RabattBundle compile ', TL_ERROR))
-                );
-            */
-            return new Response('0');
-        }
-
-        return new Response($rabattPerzent);
+        return new Response($this->lookupForRabatt($name));
     }
 
     /**
@@ -255,6 +238,7 @@ class AjaxController extends AbstractController
             'telefon' => $user->phone,
             'gender'  => $user->gender,
             'email'   => $user->email,
+            'rabatt'  => $this->lookupForRabatt($user->gutschein),
         ];
 
         return new JsonResponse($response);
@@ -293,7 +277,8 @@ class AjaxController extends AbstractController
                 'ort'     => $frontendUser->city,
                 'telefon' => $frontendUser->phone,
                 'gender'  => $frontendUser->gender,
-                'email'   => $frontendUser->email
+                'email'   => $frontendUser->email,
+                'rabatt'  => $this->lookupForRabatt($user->gutschein),
             ];
 
             return new JsonResponse($response);
@@ -324,5 +309,18 @@ class AjaxController extends AbstractController
         }
 
         return new JsonResponse($orders);
+    }
+
+    private function lookupForRabatt(string $name, int $minLength = 7): int
+    {
+        if (strlen($name) < $minLength) {
+            return 0;
+        }
+        $rabattPerzent = (int)HvzRabattModel::findRabattOnCode($name);
+        if ($rabattPerzent) {
+            return $rabattPerzent;
+        }
+
+        return 0;
     }
 }
