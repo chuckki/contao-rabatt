@@ -230,6 +230,7 @@ class AjaxController extends AbstractController
              return new JsonResponse();
         }
         $response = [
+            'userId'  => $user->id,
             'firma'   => $user->company,
             'vorname' => $user->firstname,
             'name'    => $user->lastname,
@@ -270,6 +271,7 @@ class AjaxController extends AbstractController
         if ($frontendUser && password_verify($userPw, $frontendUser->password))
         {
             $response = [
+                'userId'  => $frontendUser->id,
                 'firma'   => $frontendUser->company,
                 'vorname' => $frontendUser->firstname,
                 'name'    => $frontendUser->lastname,
