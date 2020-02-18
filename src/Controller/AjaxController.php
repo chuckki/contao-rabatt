@@ -325,4 +325,41 @@ class AjaxController extends AbstractController
 
         return 0;
     }
+
+
+    /**
+     * @Route("/public/tab", defaults={"_scope" = "frontend", "_token_check" = false})
+     */
+    public function updateHvz(): Response
+    {
+        if (1) {
+            $hvzObjs = HvzModel::findBy(['old_id > ?'], ['0']);
+            /** @var Connection $conn */
+            $conn = $this->getDoctrine()->getConnection();
+            foreach ($hvzObjs as $hvz) {
+
+                $sql = 'SELECT * FROM tl_plz_at where ortid = '.$hvz->old_id  . ' group by plz';
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $all = $stmt->fetchAll();
+                if ($hvz->old_id < 2742) {
+                    continue;
+                }
+                foreach ($all as $plzObj) {
+                    $plz        = new HvzPlzModel();
+                    $plz->plz   = $plzObj['plz'];
+                    $plz->ortid = $hvz->id;
+                    $plz->plzS  = $plzObj['plzS'];
+                    $plz->lk    = 'at';
+                    $plz->save();
+                }
+            }
+        }
+
+        $html ="done";
+
+        return new Response($html);
+    }
+
+
 }
