@@ -97,11 +97,11 @@ class AjaxController extends AbstractController
                 // build up rest of string to ortString
                 $requestOrt = implode(' ', $splitAnfrage);
                 $requestOrt = strtolower($requestOrt).'%';
-                $sql     =
+                $sql        =
                     "select distinct tl_hvz.id as hvzId, plzS as post, alias, tl_hvz.lk as lkz, question as value, isFamus from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk like '"
                     .$country."' and tl_plz.plzS like '".$requestPLZ."' and LOWER(tl_hvz.question) like '".$requestOrt
                     ."' group by question order by isFamus DESC ,question ASC   LIMIT 0, 10";
-                $sql_raw = $sql;
+                $sql_raw    = $sql;
             }
             //////////////////////////////////////////////////////
             // FIRST ORT
@@ -146,7 +146,7 @@ class AjaxController extends AbstractController
                 $request_alt3 = str_replace('ß', 'ss', $request_alt0);
                 $request_alt4 = str_replace('ss', 'ß', $requestOrt);
                 $request_alt5 = str_replace('ß', 'ss', $requestOrt);
-                $sql =
+                $sql          =
                     "select distinct tl_hvz.id as hvzId, plzS as post, question as value, land, alias, isFamus, tl_hvz.lk as lkz from tl_hvz inner join tl_plz on tl_hvz.id = tl_plz.ortid where tl_hvz.lk = '"
                     .$country."' and  tl_plz.plzS like '".$requestPLZ."' and ( LOWER(question) like '".$requestOrt
                     ."' or LOWER(question) like '".$request_alt1."' or LOWER(question) like '".$request_alt2
@@ -163,8 +163,8 @@ class AjaxController extends AbstractController
                     ."' ) group by question order by isFamus DESC ,question ASC LIMIT 0, 5;";
                 //echo "firstOrt:".$sql."\n\n";
             }
-            $result = \Database::getInstance()->prepare($sql)->query();
-            $result_raw = \Database::getInstance()->prepare($sql_raw)->query();
+            $result       = \Database::getInstance()->prepare($sql)->query();
+            $result_raw   = \Database::getInstance()->prepare($sql_raw)->query();
             $emparray     = array();
             $emparray_raw = array();
             while ($newPlz = $result_raw->fetchAssoc()) {
@@ -184,10 +184,10 @@ class AjaxController extends AbstractController
                         //}
                     }
                 }
-                $tmp['ort'] = str_replace(['&#40;', '&#41;'], ['(', ')'], $tmp['ort']);
+                $tmp['ort']     = str_replace(['&#40;', '&#41;'], ['(', ')'], $tmp['ort']);
                 $tmp['alias']   = $newPlz['alias'];
                 $tmp['id']      = $newPlz['hvzId'];
-                $tmp['lkz']      = $newPlz['lkz'];
+                $tmp['lkz']     = $newPlz['lkz'];
                 $emparray_raw[] = $tmp;
             }
             while ($newPlz = $result->fetchAssoc()) {
@@ -208,7 +208,7 @@ class AjaxController extends AbstractController
                 $tmp['ort']   = str_replace('&#41;', ')', $tmp['ort']);
                 $tmp['alias'] = $newPlz['alias'];
                 $tmp['id']    = $newPlz['hvzId'];
-                $tmp['lkz']      = $newPlz['lkz'];
+                $tmp['lkz']   = $newPlz['lkz'];
                 $emparray[]   = $tmp;
             }
             $allErg = array_unique(array_merge($emparray, $emparray_raw), SORT_REGULAR);
@@ -227,7 +227,7 @@ class AjaxController extends AbstractController
         /** @var MemberModel $user */
         $user = MemberModel::findOneBy('token', $token);
         if (!$user || !$user instanceof MemberModel) {
-             return new JsonResponse();
+            return new JsonResponse();
         }
         $response = [
             'userId'  => $user->id,
@@ -251,9 +251,8 @@ class AjaxController extends AbstractController
     public function getUserCredentialsAdvanced(Request $request): JsonResponse
     {
         // check Request for uname & upw
-        $data     = json_decode($request->getContent(), true);
-
-        if(!$data['uname'] || !$data['upw']){
+        $data = json_decode($request->getContent(), true);
+        if (!$data['uname'] || !$data['upw']) {
             return new JsonResponse(['error']);
         }
         $userName = $data['uname'];
@@ -267,9 +266,7 @@ class AjaxController extends AbstractController
         if (!$frontendUser->findBy('username', $userName)) {
             return new JsonResponse('');
         }
-
-        if ($frontendUser && password_verify($userPw, $frontendUser->password))
-        {
+        if ($frontendUser && password_verify($userPw, $frontendUser->password)) {
             $response = [
                 'userId'  => $frontendUser->id,
                 'firma'   => $frontendUser->company,
@@ -333,30 +330,107 @@ class AjaxController extends AbstractController
     public function updateHvz(): Response
     {
         if (1) {
-            $hvzObjs = HvzModel::findBy(['old_id > ?'], ['0']);
-            /** @var Connection $conn */
-            $conn = $this->getDoctrine()->getConnection();
-            foreach ($hvzObjs as $hvz) {
 
-                $sql = 'SELECT * FROM tl_plz_at where ortid = '.$hvz->old_id  . ' group by plz';
+            $ort = [
+                '1'    => 'Wien',
+                '2'    => 'Mauerbach',
+                '3'    => 'Purkersdorf',
+                '5'    => 'Wien Flughafen',
+                '6'    => 'Hausleiten',
+                '7'    => 'Sierndorf',
+                '8'    => 'Stockerau',
+                '9'    => 'Großmugl',
+                '10'   => 'Leitzersdorf',
+                '11'   => 'Niederhollabrunn',
+                '13'   => 'Göllersdorf',
+                '19'   => 'Grabern',
+                '119'  => 'Wildendürnbach',
+                '124'  => 'Palterndorf-Dobermannsdorf',
+                '129'  => 'Gaweinstal',
+                '1747' => 'Reith bei Kitzbühel',
+                '133'  => 'Großebersdorf',
+                '134'  => 'Eibesbrunn',
+                '132'  => 'Enzersfeld',
+                '130'  => 'Seyring',
+                '131'  => 'Gerasdorf',
+                '127'  => 'Rannersdorf an der Zaya',
+                '128'  => 'Prinzendorf an der Zaya',
+                '126'  => 'Hauskirchen',
+                '125'  => 'Neusiedl an der Zaya',
+                '123'  => 'Schrattenberg',
+                '122'  => 'Herrnbaumgarten',
+                '121'  => 'Kleinhadersdorf',
+                '120'  => 'Drasenhofen',
+                '118'  => 'Ottenthal',
+                '117'  => 'Falkenstein',
+                '116'  => 'Poysbrunn',
+                '18'   => 'Aspersdorf',
+                '14'   => 'Kleedorf',
+                '15'   => 'Breitenwaida',
+                '1097' => 'Großheinrichschlag',
+                '1749' => 'Westendorf',
+                '1750' => 'Brixen im Thale',
+                '1746' => 'Going am Wilden Kaiser',
+            ];
+            foreach ($ort as $key => $item) {
+
+                $hvzObjs = HvzModel::findOneBy(['question like ?'], [$item]);
+                if (!$hvzObjs) {
+                    dump($item);
+                    die('hvz not found:'.$item);
+                }
+
+                $plz = HvzPlzModel::findBy(['ortid = ?'], [$hvzObjs->id]);
+                if($plz) {
+                    continue;
+                }
+
+                /** @var Connection $conn */
+                $conn = $this->getDoctrine()->getConnection();
+                $sql  = 'SELECT * FROM tl_plz_at where ortid = '.$key.' group by plz';
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
                 $all = $stmt->fetchAll();
-                if ($hvz->old_id < 2742) {
-                    continue;
-                }
+
                 foreach ($all as $plzObj) {
                     $plz        = new HvzPlzModel();
                     $plz->plz   = $plzObj['plz'];
-                    $plz->ortid = $hvz->id;
+                    $plz->ortid = $hvzObjs->id;
                     $plz->plzS  = $plzObj['plzS'];
                     $plz->lk    = 'at';
+                    $count++;
                     $plz->save();
                 }
-            }
-        }
 
-        $html ="done";
+            }
+            //die("walter");
+            if (0) {
+                $count   = 0;
+                $hvzObjs = HvzModel::findBy(['old_id > ?'], ['0']);
+                /** @var Connection $conn */
+                $conn = $this->getDoctrine()->getConnection();
+                foreach ($hvzObjs as $hvz) {
+                    $sql  = 'SELECT * FROM tl_plz_at where ortid = '.$hvz->old_id.' group by plz';
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $all = $stmt->fetchAll();
+                    if ($hvz->old_id != 1) {
+                        continue;
+                    }
+                    foreach ($all as $plzObj) {
+                        $plz        = new HvzPlzModel();
+                        $plz->plz   = $plzObj['plz'];
+                        $plz->ortid = $hvz->id;
+                        $plz->plzS  = $plzObj['plzS'];
+                        $plz->lk    = 'at';
+                        $count++;
+                        $plz->save();
+                    }
+                }
+            }
+
+        }
+        $html = "done:".$count;
 
         return new Response($html);
     }
