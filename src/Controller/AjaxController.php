@@ -260,11 +260,11 @@ class AjaxController extends AbstractController
         /** @var MemberModel $user */
         $user = MemberModel::findOneBy('username', $userName);
         if (!$user || !$user instanceof MemberModel) {
-            return new JsonResponse('');
+            return new JsonResponse();
         }
         $frontendUser = FrontendUser::getInstance();
         if (!$frontendUser->findBy('username', $userName)) {
-            return new JsonResponse('');
+            return new JsonResponse();
         }
         if ($frontendUser && password_verify($userPw, $frontendUser->password)) {
             $response = [
@@ -283,7 +283,7 @@ class AjaxController extends AbstractController
             return new JsonResponse($response);
         }
 
-        return new JsonResponse('');
+        return new JsonResponse();
     }
 
     /**
