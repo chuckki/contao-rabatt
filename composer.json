@@ -1,6 +1,6 @@
 {
     "name" : "chuckki/contao-rabatt",
-    "description" : "Rabatt extension for Contao",
+    "description" : "Rabatt extension for hvb",
     "type": "contao-bundle",
     "authors" : [
       {
