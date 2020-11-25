@@ -62,7 +62,7 @@ class AjaxController extends AbstractController
             //////////////////////////////////////////////////////
             // CLEAN UP REQUEST
             //////////////////////////////////////////////////////
-            if (!preg_match("/^([a-zA-Z0-9öäüßÖÄÜ,.() \n\r-]+)$/is", $request)) {
+            if (!preg_match("/^([\p{L}a-zA-Z0-9öäüßÖÄÜ,.() \n\r-]+)$/is", $request)) {
                 //$errorArray = array('ort' => "Unerlaubte Zeichen enthalten!");
                 $errorArray       = array();
                 $tmpInsert        = array();
