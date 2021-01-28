@@ -228,7 +228,6 @@ class ImportController extends AbstractController
         }
         $answer = 'anzahl city:'.count($newCities);
         $answer .= ' anzahl plz:'.$plzCount;
-        dump($newCities);
         die($answer);
 
     }
